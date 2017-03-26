@@ -85,6 +85,8 @@ int main( int argc, const char* argv[] )
         return EXIT_SUCCESS;
     }
 
+    testGpu();
+
     return EXIT_SUCCESS;
 }
 
@@ -111,16 +113,16 @@ void testCpu()
         globalData.totResizeCpu_msec += static_cast<double>(dur.count())/1000;
 
         start = high_resolution_clock::now();
-        cv::blur( elab, elab, cv::Size(3,3) );
-        end = high_resolution_clock::now();
-        dur = duration_cast<microseconds>(end - start);
-        globalData.totBlurCpu_msec += static_cast<double>(dur.count())/1000;
-
-        start = high_resolution_clock::now();
         cv::cvtColor( elab, elab, CV_RGB2GRAY );
         end = high_resolution_clock::now();
         dur = duration_cast<microseconds>(end - start);
         globalData.totCvtCpu_msec += static_cast<double>(dur.count())/1000;
+
+        start = high_resolution_clock::now();
+        cv::blur( elab, elab, cv::Size(3,3) );
+        end = high_resolution_clock::now();
+        dur = duration_cast<microseconds>(end - start);
+        globalData.totBlurCpu_msec += static_cast<double>(dur.count())/1000;
 
         start = high_resolution_clock::now();
         cv::Canny( elab, elab, 150, 100 );
@@ -136,18 +138,18 @@ void testCpu()
     cout << " Resize \t " << "Total: " << globalData.totResizeCpu_msec << " msec \t Mean: " <<
             globalData.totResizeCpu_msec/globalData.count << " msec" << endl;
 
-    cout << " Blur \t " << "Total: " << globalData.totBlurCpu_msec << " msec \t Mean: " <<
-            globalData.totBlurCpu_msec/globalData.count << " msec" << endl;
-
     cout << " RGB2Gray \t " << "Total: " << globalData.totCvtCpu_msec << " msec \t Mean: " <<
             globalData.totCvtCpu_msec/globalData.count << " msec" << endl;
 
-    cout << " Canny \t " << "Total: " << globalData.totCannyCpu_msec << " msec \t Mean: " <<
+    cout << " Blur \t\t " << "Total: " << globalData.totBlurCpu_msec << " msec \t Mean: " <<
+            globalData.totBlurCpu_msec/globalData.count << " msec" << endl;
+
+    cout << " Canny \t\t " << "Total: " << globalData.totCannyCpu_msec << " msec \t Mean: " <<
             globalData.totCannyCpu_msec/globalData.count << " msec" << endl;
 
     cout << "---------------------------------------------------------------" << endl;
     cout << "Process \t " << "Total: " << globalData.totCpu_msec << " msec \t Mean: " <<
-            globalData.totCpu_msec/globalData.count << " msec" << endl;
+            globalData.totCpu_msec/globalData.count << " msec" << endl << endl;
 }
 
 void testGpu()
@@ -164,9 +166,8 @@ void testGpu()
     {
         auto proc_start = high_resolution_clock::now();
 
-
-        cv::gpu::GpuMat elab;
-        elab.download( globalData.source );
+        cv::gpu::GpuMat elab,gray;
+        elab.upload( globalData.source );
 
         auto start = high_resolution_clock::now();
         cv::gpu::resize( elab, elab, cv::Size(1280,720) );
@@ -175,19 +176,19 @@ void testGpu()
         globalData.totResizeGpu_msec += static_cast<double>(dur.count())/1000;
 
         start = high_resolution_clock::now();
-        cv::gpu::blur( elab, elab, cv::Size(3,3) );
-        end = high_resolution_clock::now();
-        dur = duration_cast<microseconds>(end - start);
-        globalData.totBlurGpu_msec += static_cast<double>(dur.count())/1000;
-
-        start = high_resolution_clock::now();
-        cv::gpu::cvtColor( elab, elab, CV_RGB2GRAY );
+        cv::gpu::cvtColor( elab, gray, CV_BGR2GRAY );
         end = high_resolution_clock::now();
         dur = duration_cast<microseconds>(end - start);
         globalData.totCvtGpu_msec += static_cast<double>(dur.count())/1000;
 
         start = high_resolution_clock::now();
-        cv::gpu::Canny( elab, elab, 150, 100 );
+        cv::gpu::blur( gray, gray, cv::Size(3,3) );
+        end = high_resolution_clock::now();
+        dur = duration_cast<microseconds>(end - start);
+        globalData.totBlurGpu_msec += static_cast<double>(dur.count())/1000;
+
+        start = high_resolution_clock::now();
+        cv::gpu::Canny( gray, gray, 150, 100 );
         end = high_resolution_clock::now();
         dur = duration_cast<microseconds>(end - start);
         globalData.totCannyGpu_msec += static_cast<double>(dur.count())/1000;
@@ -200,13 +201,13 @@ void testGpu()
     cout << " Resize \t " << "Total: " << globalData.totResizeGpu_msec << " msec \t Mean: " <<
             globalData.totResizeGpu_msec/globalData.count << " msec" << endl;
 
-    cout << " Blur \t " << "Total: " << globalData.totBlurGpu_msec << " msec \t Mean: " <<
-            globalData.totBlurGpu_msec/globalData.count << " msec" << endl;
-
     cout << " RGB2Gray \t " << "Total: " << globalData.totCvtGpu_msec << " msec \t Mean: " <<
             globalData.totCvtGpu_msec/globalData.count << " msec" << endl;
 
-    cout << " Canny \t " << "Total: " << globalData.totCannyGpu_msec << " msec \t Mean: " <<
+    cout << " Blur \t\t " << "Total: " << globalData.totBlurGpu_msec << " msec \t Mean: " <<
+            globalData.totBlurGpu_msec/globalData.count << " msec" << endl;
+
+    cout << " Canny \t\t " << "Total: " << globalData.totCannyGpu_msec << " msec \t Mean: " <<
             globalData.totCannyGpu_msec/globalData.count << " msec" << endl;
 
     cout << "---------------------------------------------------------------" << endl;

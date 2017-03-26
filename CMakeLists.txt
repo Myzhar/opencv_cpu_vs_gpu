@@ -12,7 +12,10 @@ if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: ${CMAKE_CONFIGURATION_TYPES}." FORCE) 
 endif()
 
+set(CMAKE_BUILD_TYPE Debug)
+
 set(CMAKE_DEBUG_POSTFIX "_d")
+set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 ############################################################################################################################
 
 ############################################################################################################################
@@ -48,6 +51,7 @@ endif (UNIX)
 
 ############################################################################################################################
 # EXECUTABLE
+
 add_executable(
     ${PROJECT_NAME}
     ${${PROJECT_NAME}_HDR}
