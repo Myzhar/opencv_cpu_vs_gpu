@@ -3,8 +3,8 @@ A serie of tests to compare performances of **CPU** and **GPU** processing.
 
 This benchmark is based on OpenCV 2.4.13 and performs a simple basic algorithm of computer vision :
 * **resize**: to keep costant the process time and indipendent by image size
-* **blur**: to remove noises
 * **color conversion**: to pass from RGB to grayscale image
+* **blur**: to remove noises
 * **Canny**: to detect image corners
 
 The algorithm has not a well defined goal, but it may be for example the beginning of a process of "line" or "circle" detection...
