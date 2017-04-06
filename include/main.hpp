@@ -12,4 +12,17 @@ void printUsage();
 void testCpu();
 void testGpu();
 void testGpuZeroCopy();
+void testGpuMemManaged();
 void saveResImages();
+
+class Timer
+{
+public:
+    Timer(){};
+
+    void tic(); ///< Start timer
+    double toc(); ///< Returns msec elapsed from last tic
+
+private:
+    std::chrono::high_resolution_clock::time_point mStart;
+};
