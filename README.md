@@ -13,7 +13,8 @@ The process is iterated "N" times on the same image and a mean of the single ste
 
 The same algorithm is moved to the **GPU** (only if the machine is *CUDA enabled*).
 
-On the GPU the first benchmark is performed downloading the source image to GPU memory using the default "download" function.
-A second benchmark is performed if the GPU device allows the allocation of the memory from host to device using the "**ZERO COPY**" flag, this is the case of Nvidia Jetson boards, for which the benchmark as been mainly written.
-
+**GPU TEST**
+* *Classic memory copy*: uses the "upload" approach to copy memory from host to device
+* *ZERO COPY*: uses "gpu::CudaMem" with "ALLOC_ZEROCOPY" flag to take advantage of shared memory *(if available)*
+* *Memory Managed*: allocates memory using "cudaMallocManaged" to take advantage of pinned memory *(if available)*
 
