@@ -377,10 +377,10 @@ void testGpuMemManaged()
         globalData.totGpuMan_msec += procTmr.toc();
     }
 
-    cv::Mat res;
+    /*cv::Mat res;
     result.download(res);
     cv::imshow( "GPU ZeroCopy",res );
-    cv::waitKey();
+    cv::waitKey();*/
 
     cout << " Memory \t " << "Total: " << globalData.totMemGpuMan_msec << " msec \t Mean: " <<
             globalData.totMemGpuMan_msec/globalData.count << " msec" << endl;
