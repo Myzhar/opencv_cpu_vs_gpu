@@ -17,3 +17,5 @@ The same algorithm is moved to the **GPU** (only if the machine is *CUDA enabled
 * *Classic memory copy*: uses the "upload" approach to copy memory from host to device
 * *ZERO COPY*: uses "gpu::CudaMem" with "ALLOC_ZEROCOPY" flag to take advantage of shared memory *(if available)*
 * *Memory Managed*: allocates memory using "cudaMallocManaged" to take advantage of pinned memory *(if available)*
+
+
