@@ -348,6 +348,7 @@ void testGpuMemManaged()
         int size = w*h*ch;
 
         uint8_t* mem;
+        cudaSetDeviceFlags(cudaDeviceMapHost); //  This flag must be set in order to allocate pinned host memory that is accessible to the device
         cudaMallocManaged( &mem, sizeof(uint8_t)*size );
         memcpy( mem, globalData.source.data, sizeof(uchar)*size );
         cv::gpu::GpuMat elab( globalData.source.size(), CV_8UC3, mem );
